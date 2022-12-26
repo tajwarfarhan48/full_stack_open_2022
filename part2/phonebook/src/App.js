@@ -30,7 +30,18 @@ const App = () => {
         setNewPhone( '' )
         setFilterText( '' )
     } )
-
+      .catch( err => { 
+        setMessageType( 2 )
+        if ( err.response.status === 400 ) {
+          setMessage( err.response.data.error )
+        }
+        setTimeout( () => {
+          setMessage( null )
+        }, 3000 )
+        setNewName( '' )
+        setNewPhone( '' )
+        setFilterText( '' )
+       } )
     
   }
 
@@ -49,9 +60,12 @@ const App = () => {
         setFilterText( '' )
       })
       .catch( err => {
-        setPersons( persons.filter( p => p.id !== id ) )
+        // setPersons( persons.filter( p => p.id !== id ) )
         setMessageType( 2 )
-        setMessage( `The contact ${newName} is no longer available` )
+        if ( err.response.status === 400 )
+          setMessage( `Please enter a valid number` )
+        else 
+          setMessage( 'There was an unexpected error. Please try again later' )
         setTimeout(() => {
           setMessage( null )
         }, 3000)
